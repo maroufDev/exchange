@@ -2,15 +2,203 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>صرافی</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="Vazir.ttf" rel="font" type="font/ttf" crossorigin="anonymous">
+    <style>
+        /* Vazir Font Face */
+        @font-face {
+            font-family: 'Vazir';
+            src: url('Vazir.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazir', Arial, sans-serif; /* Fallback fonts */
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2f3f, #0d1a26);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .title {
+            font-size: 2rem;
+            color: #00ff88;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+            margin-bottom: 0.8rem;
+            font-family: 'Vazir', Arial, sans-serif;
+        }
+
+        .description {
+            font-size: 0.95rem;
+            color: #a0aec0;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            padding: 0 1rem;
+            font-family: 'Vazir', Arial, sans-serif;
+        }
+
+        .trading-button {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            color: #1a2f3f;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.2);
+            width: 90%;
+            max-width: 300px;
+            margin: 0 auto;
+            font-family: 'Vazir', Arial, sans-serif;
+        }
+
+        .trading-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 10px rgba(0, 255, 136, 0.2);
+        }
+
+        .stock-ticker {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.8rem;
+            font-family: 'Courier New', monospace;
+            color: #00ff88;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        /* Mobile-first media queries */
+        @media (min-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .description {
+                font-size: 1.1rem;
+            }
+            
+            .trading-button {
+                padding: 1rem 2.5rem;
+                font-size: 1.2rem;
+            }
+            
+            .stock-ticker {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+            
+            .title {
+                font-size: 1.8rem;
+            }
+            
+            .description {
+                font-size: 0.9rem;
+                padding: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>صرافی تبدیل</h1>
-        <button class="big-button" onclick="alert('https://tabdeal.org/auth/register-req?ref=2iv39l')">میلی</button>
+    <div class="header">
+        <h1 class="title">📈 صرافی تبدیل</h1>
+        <p class="description">
+            فکر کردن کافیه؛ ترید کردن رو شروع کن 💸😉
+            <br><br>
+            !در صرافی تبدیل ثبت‌نام کنید و معاملات امن ارزهای دیجیتال را با ابزارهای پیشرفته تجربه کنید
+            <br><br>
+            <!-- <em>امکان خرید و فروش بیش از ۳۸۰ ارز دیجیتال🔸
+                <br>
+                🔸کسب سود ۱۰ برابر از رشد یا حتی ریزش قیمت ارزهای دیجیتال به کمک معاملات اهرم‌دار
+                <br>
+                نوسان‌گیری ۲۴ ساعته و خودکار به کمک ربات نوسان‌گیر🔸
+                <br>
+                سرمایه‌گذاری در سبدهای پرسود سایر معامله‌گران تبدیل</em> -->
+                <!-- <br><br> -->
+                با لینک سودجو ثبت نام کن
+                <br>
+                 تا شش ماه تخفیف کارمزد معاملاتی دریافت کن ❤️🤞
+                 <br>
+                 همچنین بدون قرعه‌کشی ارز دیجیتال هدیه بگیر
+        </p>
+        <button class="trading-button" onclick="alert('https://tabdeal.org/auth/register-req?ref=2iv39l')">
+            🚀 ثبت نام سریع در تبدیل
+        </button>
     </div>
+
+    <div class="stock-ticker" id="ticker"></div>
+
+    <script>
+        function showTradingAlert() {
+            const symbols = ['AAPL', 'TSLA', 'GOOGL', 'AMZN', 'MSFT'];
+            const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+            const price = (Math.random() * 500).toFixed(2);
+            
+            Swal.fire({
+                title: 'Trade Executed!',
+                html: `✅ Successfully traded ${randomSymbol}<br>
+                       <span style="color: #00ff88">@ $${price} per share</span>`,
+                icon: 'success',
+                background: '#1a2f3f',
+                confirmButtonColor: '#00ff88',
+                confirmButtonText: 'Close',
+                customClass: {
+                    title: 'swal-title',
+                    content: 'swal-text'
+                },
+                width: '85%',
+                backdrop: 'rgba(0,0,0,0.7)'
+            });
+        }
+
+        // Mobile-friendly stock ticker
+        const ticker = document.getElementById('ticker');
+        const symbols = ['AAPL', 'TSLA', 'GOOGL', 'AMZN', 'MSFT', 'NFLX', 'NVDA'];
+        
+        function updateTicker() {
+            let tickerContent = '';
+            symbols.forEach(symbol => {
+                const price = (Math.random() * 500).toFixed(2);
+                const change = (Math.random() * 5 - 2.5).toFixed(2);
+                const color = change >= 0 ? '#00ff88' : '#ff4444';
+                tickerContent += `${symbol} $${price} <span style="color: ${color}">${change}%</span> `;
+            });
+            ticker.innerHTML = tickerContent;
+        }
+
+        setInterval(updateTicker, 1000);
+        updateTicker();
+    </script>
+    
+    <!-- SweetAlert for beautiful alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>
